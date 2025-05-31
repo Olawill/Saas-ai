@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderPinwheel, OctagonAlertIcon } from "lucide-react";
@@ -18,10 +20,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { authClient } from "@/lib/auth-client";
+import { onSocial } from "@/lib/social";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -49,6 +52,7 @@ export const SignInView = () => {
       {
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -87,6 +91,7 @@ export const SignInView = () => {
                         <FormControl>
                           <Input
                             type="email"
+                            disabled={pending}
                             placeholder="m@example.com"
                             {...field}
                           />
@@ -107,6 +112,7 @@ export const SignInView = () => {
                         <FormControl>
                           <Input
                             type="password"
+                            disabled={pending}
                             placeholder="********"
                             {...field}
                           />
@@ -129,7 +135,7 @@ export const SignInView = () => {
                   type="submit"
                   disabled={pending}
                 >
-                  {pending && (
+                  {pending && form.formState.isDirty && (
                     <LoaderPinwheel className="animate-spin text-secondary" />
                   )}
                   Sign in
@@ -144,17 +150,33 @@ export const SignInView = () => {
                   <Button
                     variant="outline"
                     disabled={pending}
+                    onClick={() =>
+                      onSocial({
+                        provider: "google",
+                        setError,
+                        setPending,
+                      })
+                    }
                     type="button"
                     className="w-full cursor-pointer"
                   >
+                    <FcGoogle />
                     Google
                   </Button>
                   <Button
                     variant="outline"
                     disabled={pending}
+                    onClick={() =>
+                      onSocial({
+                        provider: "github",
+                        setError,
+                        setPending,
+                      })
+                    }
                     type="button"
                     className="w-full cursor-pointer"
                   >
+                    <FaGithub />
                     Github
                   </Button>
                 </div>

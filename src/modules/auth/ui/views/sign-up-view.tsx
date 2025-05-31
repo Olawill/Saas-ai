@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderPinwheel, OctagonAlertIcon } from "lucide-react";
@@ -22,6 +24,7 @@ import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { onSocial } from "@/lib/social";
 
 const formSchema = z
   .object({
@@ -63,6 +66,7 @@ export const SignUpView = () => {
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -110,7 +114,12 @@ export const SignUpView = () => {
                       <FormItem>
                         <FormLabel>First Name</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="John" {...field} />
+                          <Input
+                            type="text"
+                            disabled={pending}
+                            placeholder="John"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -124,7 +133,12 @@ export const SignUpView = () => {
                       <FormItem>
                         <FormLabel>Last Name</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="Doe" {...field} />
+                          <Input
+                            type="text"
+                            disabled={pending}
+                            placeholder="Doe"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -142,6 +156,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="email"
+                            disabled={pending}
                             placeholder="m@example.com"
                             {...field}
                           />
@@ -162,6 +177,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="password"
+                            disabled={pending}
                             placeholder="********"
                             {...field}
                           />
@@ -182,6 +198,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="password"
+                            disabled={pending}
                             placeholder="********"
                             {...field}
                           />
@@ -204,10 +221,10 @@ export const SignUpView = () => {
                   type="submit"
                   disabled={pending}
                 >
-                  {pending && (
+                  {pending && form.formState.isDirty && (
                     <LoaderPinwheel className="animate-spin text-secondary" />
                   )}
-                  Sign in
+                  Sign up
                 </Button>
 
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -219,17 +236,33 @@ export const SignUpView = () => {
                   <Button
                     variant="outline"
                     disabled={pending}
+                    onClick={() =>
+                      onSocial({
+                        provider: "google",
+                        setError,
+                        setPending,
+                      })
+                    }
                     type="button"
                     className="w-full cursor-pointer"
                   >
+                    <FcGoogle />
                     Google
                   </Button>
                   <Button
                     variant="outline"
                     disabled={pending}
+                    onClick={() =>
+                      onSocial({
+                        provider: "github",
+                        setError,
+                        setPending,
+                      })
+                    }
                     type="button"
                     className="w-full cursor-pointer"
                   >
+                    <FaGithub />
                     Github
                   </Button>
                 </div>
