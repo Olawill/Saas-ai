@@ -221,7 +221,7 @@ export const SignUpView = () => {
                 <Button
                   className="w-full cursor-pointer"
                   type="submit"
-                  disabled={pending}
+                  disabled={isPending}
                 >
                   {pending && (
                     <LoaderPinwheel className="animate-spin text-secondary" />
@@ -237,7 +237,7 @@ export const SignUpView = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <Button
                     variant="outline"
-                    disabled={pending}
+                    disabled={isPending}
                     onClick={() =>
                       onSocial({
                         provider: "google",
