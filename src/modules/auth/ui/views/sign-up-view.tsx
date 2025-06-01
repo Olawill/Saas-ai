@@ -45,6 +45,8 @@ export const SignUpView = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [socialPending, setSocialPending] = useState(false);
+  const isPending = pending || socialPending;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -116,7 +118,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="text"
-                            disabled={pending}
+                            disabled={isPending}
                             placeholder="John"
                             {...field}
                           />
@@ -135,7 +137,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="text"
-                            disabled={pending}
+                            disabled={isPending}
                             placeholder="Doe"
                             {...field}
                           />
@@ -156,7 +158,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="email"
-                            disabled={pending}
+                            disabled={isPending}
                             placeholder="m@example.com"
                             {...field}
                           />
@@ -177,7 +179,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="password"
-                            disabled={pending}
+                            disabled={isPending}
                             placeholder="********"
                             {...field}
                           />
@@ -198,7 +200,7 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="password"
-                            disabled={pending}
+                            disabled={isPending}
                             placeholder="********"
                             {...field}
                           />
@@ -221,7 +223,7 @@ export const SignUpView = () => {
                   type="submit"
                   disabled={pending}
                 >
-                  {pending && form.formState.isDirty && (
+                  {pending && (
                     <LoaderPinwheel className="animate-spin text-secondary" />
                   )}
                   Sign up
@@ -240,7 +242,7 @@ export const SignUpView = () => {
                       onSocial({
                         provider: "google",
                         setError,
-                        setPending,
+                        setPending: setSocialPending,
                       })
                     }
                     type="button"
@@ -251,12 +253,12 @@ export const SignUpView = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    disabled={pending}
+                    disabled={isPending}
                     onClick={() =>
                       onSocial({
                         provider: "github",
                         setError,
-                        setPending,
+                        setPending: setSocialPending,
                       })
                     }
                     type="button"

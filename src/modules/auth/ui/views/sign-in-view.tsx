@@ -35,6 +35,7 @@ export const SignInView = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [socialPending, setSocialPending] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,7 +92,7 @@ export const SignInView = () => {
                         <FormControl>
                           <Input
                             type="email"
-                            disabled={pending}
+                            disabled={pending || socialPending}
                             placeholder="m@example.com"
                             {...field}
                           />
@@ -112,7 +113,7 @@ export const SignInView = () => {
                         <FormControl>
                           <Input
                             type="password"
-                            disabled={pending}
+                            disabled={pending || socialPending}
                             placeholder="********"
                             {...field}
                           />
@@ -133,9 +134,9 @@ export const SignInView = () => {
                 <Button
                   className="w-full cursor-pointer"
                   type="submit"
-                  disabled={pending}
+                  disabled={pending || socialPending}
                 >
-                  {pending && form.formState.isDirty && (
+                  {pending && (
                     <LoaderPinwheel className="animate-spin text-secondary" />
                   )}
                   Sign in
@@ -149,12 +150,12 @@ export const SignInView = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <Button
                     variant="outline"
-                    disabled={pending}
+                    disabled={pending || socialPending}
                     onClick={() =>
                       onSocial({
                         provider: "google",
                         setError,
-                        setPending,
+                        setPending: setSocialPending,
                       })
                     }
                     type="button"
@@ -165,12 +166,12 @@ export const SignInView = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    disabled={pending}
+                    disabled={pending || socialPending}
                     onClick={() =>
                       onSocial({
                         provider: "github",
                         setError,
-                        setPending,
+                        setPending: setSocialPending,
                       })
                     }
                     type="button"
