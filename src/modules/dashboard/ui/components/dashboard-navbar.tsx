@@ -45,7 +45,7 @@ export const DashboardNavbar = () => {
         <Button
           variant="outline"
           size="sm"
-          className="h-9 w-[240px] justify-start font-normal text-muted-foreground hover:text-muted-foreground"
+          className="h-9 w-[240px] cursor-pointer justify-start font-normal text-muted-foreground hover:text-muted-foreground"
           onClick={() => setCommandOpen((open) => !open)}
         >
           <SearchIcon />
