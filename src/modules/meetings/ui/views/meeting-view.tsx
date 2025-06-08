@@ -5,21 +5,22 @@ import { useRouter } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { columns } from "../components/columns";
-import { DataTable } from "../../../../components/data-table";
-import { useAgentsFilters } from "../../hooks/use-agents-filters";
 
+import { DataTable } from "@/components/data-table";
 import { ErrorState } from "@/components/error-state";
 import { EmptyState } from "@/components/empty-state";
 import { LoadingState } from "@/components/loading-state";
 import { DataPagination } from "@/components/data-pagination";
 
-export const AgentsView = () => {
+import { useMeetingsFilters } from "@/modules/meetings/hooks/use-meetings-filters";
+
+export const MeetingsView = () => {
   const router = useRouter();
-  const [filters, setFilters] = useAgentsFilters();
+  const [filters, setFilters] = useMeetingsFilters();
 
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
-    trpc.agents.getMany.queryOptions({
+    trpc.meetings.getMany.queryOptions({
       ...filters,
     })
   );
@@ -29,7 +30,7 @@ export const AgentsView = () => {
       <DataTable
         data={data.items}
         columns={columns}
-        onRowClick={(row) => router.push(`/agents/${row.id}`)}
+        onRowClick={(row) => router.push(`/meetings/${row.id}`)}
       />
 
       {data.items.length > 0 && (
@@ -42,27 +43,27 @@ export const AgentsView = () => {
 
       {data.items.length === 0 && (
         <EmptyState
-          title="Create your first agent"
-          description="Create an agent to join your meetings. Each agent will follow your instructions and can interact with participants during the call."
+          title="Create your first meeting"
+          description="Schedule a meeting to connect with others. Each meeting lets you collaborate, share ideas, and interact with participants in real time."
         />
       )}
     </div>
   );
 };
 
-export const AgentsViewLoading = () => {
+export const MeetingsViewLoading = () => {
   return (
     <LoadingState
-      title="Loading Agents"
+      title="Loading Meetings"
       description="This may take a few seconds"
     />
   );
 };
 
-export const AgentsViewError = () => {
+export const MeetingsViewError = () => {
   return (
     <ErrorState
-      title="Error Loading Agents"
+      title="Error Loading Meetings"
       description="Please try again later"
     />
   );
