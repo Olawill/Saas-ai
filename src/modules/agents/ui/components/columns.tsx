@@ -46,8 +46,4 @@ export const columns: ColumnDef<AgentGetOne>[] = [
       </Badge>
     ),
   },
-  // {
-  //   accessorKey: "amount",
-  //   header: "Amount",
-  // },
 ];

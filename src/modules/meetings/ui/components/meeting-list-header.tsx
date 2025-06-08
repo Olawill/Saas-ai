@@ -4,44 +4,52 @@ import { useState } from "react";
 import { PlusSquare, XCircleIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
+import { NewMeetingDialog } from "./new-meeting-dialog";
+import { MeetingSearchFilter } from "./meeting-search-filter";
+import { useMeetingsFilters } from "../../hooks/use-meetings-filters";
+
+import { DEFAULT_PAGE } from "@/constants";
+import { StatusFilter } from "./status-filter";
+import { AgentIdFilter } from "./agent-id-filter";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-import { NewAgentDialog } from "./new-agent-dialog";
-import { AgentSearchFilter } from "./agent-search-filter";
-import { useAgentsFilters } from "../../hooks/use-agents-filters";
-import { DEFAULT_PAGE } from "@/constants";
-
-export const AgentListHeader = () => {
-  const [filters, setFilters] = useAgentsFilters();
+export const MeetingListHeader = () => {
+  const [filters, setFilters] = useMeetingsFilters();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const isAnyFilterModified = !!filters.search;
+  const isAnyFilterModified =
+    !!filters.search || !!filters.status || !!filters.agentId;
 
   const onClearFilters = () => {
     setFilters({
       search: "",
       page: DEFAULT_PAGE,
+      agentId: "",
+      status: null,
     });
   };
 
   return (
     <>
-      <NewAgentDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <NewMeetingDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
       <div className="p-4 md:px-8 flex flex-col gap-y-4">
         <div className="flex items-center justify-between">
-          <h5 className="font-medium text-xl">My Agents</h5>
+          <h5 className="font-medium text-xl">My Meetings</h5>
           <Button
             className="cursor-pointer"
             onClick={() => setIsDialogOpen(true)}
           >
             <PlusSquare />
-            New Agent
+            New Meeting
           </Button>
         </div>
 
         <ScrollArea className="pb-2">
           <div className="flex items-center gap-x-2 p-1">
-            <AgentSearchFilter />
+            <MeetingSearchFilter />
+            <StatusFilter />
+            <AgentIdFilter />
             {isAnyFilterModified && (
               <Button
                 onClick={onClearFilters}

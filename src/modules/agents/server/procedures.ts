@@ -60,7 +60,7 @@ export const agentsRouter = createTRPCRouter({
         .from(agents)
         .where(
           and(
-            eq(agents.userId, ctx.auth.user.id),
+            eq(agents.userId, ctx.auth.session.userId),
             search ? ilike(agents.name, `%${search}%`) : undefined
           )
         )
@@ -72,7 +72,7 @@ export const agentsRouter = createTRPCRouter({
         .from(agents)
         .where(
           and(
-            eq(agents.userId, ctx.auth.user.id),
+            eq(agents.userId, ctx.auth.session.userId),
             search ? ilike(agents.name, `%${search}%`) : undefined
           )
         );
@@ -92,7 +92,7 @@ export const agentsRouter = createTRPCRouter({
         .insert(agents)
         .values({
           ...input,
-          userId: ctx.auth.user.id,
+          userId: ctx.auth.session.userId,
         })
         .returning();
 
@@ -120,14 +120,15 @@ export const agentsRouter = createTRPCRouter({
   update: protectedProcedure
     .input(agentsUpdateSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...updateData } = input;
       const [updatedAgent] = await db
         .update(agents)
-        .set(input)
+        .set({
+          ...updateData,
+          updatedAt: new Date(),
+        })
         .where(
-          and(
-            eq(agents.id, input.id),
-            eq(agents.userId, ctx.auth.session.userId)
-          )
+          and(eq(agents.id, id), eq(agents.userId, ctx.auth.session.userId))
         )
         .returning();
 
