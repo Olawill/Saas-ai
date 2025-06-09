@@ -3,14 +3,21 @@ import Image from "next/image";
 interface Props {
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
 }
 
-export const EmptyState = ({ title, description }: Props) => {
+export const EmptyState = ({
+  title,
+  description,
+  image = "/empty.svg",
+  imageAlt,
+}: Props) => {
   return (
     <div className="flex flex-col justify-center items-center">
       <Image
-        src="/empty.svg"
-        alt="Empty"
+        src={image}
+        alt={imageAlt ?? "Empty"}
         width={240}
         height={240}
         className="w-[240px] h-[240px]"
