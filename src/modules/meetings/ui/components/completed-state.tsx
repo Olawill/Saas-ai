@@ -16,6 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { MeetingGetOne } from "../../types";
 import { formatDuration } from "@/lib/utils";
+import { Transcript } from "./transcript";
+import { ChatProvider } from "./chat-provider";
 
 interface Props {
   data: MeetingGetOne;
@@ -65,6 +67,14 @@ export const CompletedState = ({ data }: Props) => {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </div>
+
+        <TabsContent value="chat">
+          <ChatProvider meetingId={data.id} meetingName={data.name} />
+        </TabsContent>
+
+        <TabsContent value="transcript">
+          <Transcript meetingId={data.id} />
+        </TabsContent>
 
         <TabsContent value="recording">
           <div className="bg-white rounded-lg border px-4 py-5">
@@ -128,7 +138,10 @@ export const CompletedState = ({ data }: Props) => {
                       <ul className="list-disc list-inside mb-6" {...props} />
                     ),
                     ol: (props) => (
-                      <ol className="list-disc list-inside mb-6" {...props} />
+                      <ol
+                        className="list-decimal list-inside mb-6"
+                        {...props}
+                      />
                     ),
                     li: (props) => <li className="mb-1" {...props} />,
                     strong: (props) => (
@@ -148,7 +161,7 @@ export const CompletedState = ({ data }: Props) => {
                     ),
                   }}
                 >
-                  {data.summary}
+                  {data.summary?.replace(/\[\d+-\d+\]/g, "").trim()}
                 </Markdown>
               </div>
             </div>
